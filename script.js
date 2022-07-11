@@ -11,18 +11,14 @@ class Book {
 const Library = (() => {
   const lib = [];
 
-  const addBook = (book) => {
-    if (lib.indexOf(book) === -1){
-      lib.push(book);
-    };
-  };
-
-  const removeBook = (book) => {
-    lib.splice(lib.indexOf(book), 1);
-  };
-
-  const getBooks = () => {
-    return lib;
+  const addBook = (newBook) => {
+    let isDup = false;
+    lib.forEach(book => {
+      if ((book.title === newBook.title) && (book.author === newBook.author)){
+        isDup = true;
+      };
+    });
+    (!isDup) ? lib.push(newBook) : alert(`Book '${newBook.title}' is in library!`);
   };
 
   const displayBooks = () => {
@@ -36,11 +32,21 @@ const Library = (() => {
                           <p>${item.pages}</p>
                           <p>${item.isRead}</p>
                           <button class="remove">remove</button>`;
-      display.appendChild(newDiv);;
+      display.appendChild(newDiv);
     };
+    const rm_btns = document.querySelectorAll('.remove');
+    rm_btns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        let idx = e.currentTarget.parentNode.classList.value;
+        idx = idx.substring(4);
+        lib.splice(idx, 1);
+        displayBooks();
+      })
+    })
+
   };
 
-  return{addBook, removeBook, getBooks, displayBooks};
+  return{addBook, displayBooks};
 })();
 
 const sub_btn = document.getElementById('submit_btn');
